@@ -5,9 +5,12 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Referenes")]
     [SerializeField] private NavMeshAgent agent;
 
-    [SerializeField] private Transform target;
+    [Header("Debug")]
+    [SerializeField, ReadOnly] private Transform target;
+    [SerializeField] private bool disable;
 
     private void Awake()
     {
@@ -24,6 +27,9 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (disable)
+            return;
+
         if (target != null)
             agent.SetDestination(target.position);
     }
