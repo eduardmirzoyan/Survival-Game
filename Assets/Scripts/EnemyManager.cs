@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -12,17 +13,53 @@ public class EnemyManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float delay;
     [SerializeField] private float spawnOffset;
+    [SerializeField] private int enemyCap;
+    [SerializeField] private int killGoal;
 
     [Header("Debug")]
+    [SerializeField, ReadOnly] private float minSpawnRadius;
     [SerializeField, ReadOnly] private int enemyCount;
+    [SerializeField, ReadOnly] private int killCount;
+
+    private int[,] map;
+    private Coroutine coroutine;
+
+    public static EnemyManager instance;
+    private void Awake()
+    {
+        // Singleton Logic
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+    }
 
     private void Start()
     {
         cam = Camera.main;
+        float screenHeight = 2 * cam.orthographicSize;
+        float screenWidth = cam.aspect * screenHeight;
+        minSpawnRadius = Mathf.Sqrt(screenHeight * screenHeight + screenWidth * screenWidth) / 2f;
 
         enemyCount = 0;
+    }
 
-        StartCoroutine(SpawnEnemy(delay));
+    public void Initialize(int[,] map)
+    {
+        this.map = map;
+    }
+
+    public void StartSpawning()
+    {
+        coroutine = StartCoroutine(SpawnEnemy(delay));
+    }
+    public void StopSpawning()
+    {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
     }
 
     private IEnumerator SpawnEnemy(float delay)
@@ -31,13 +68,13 @@ public class EnemyManager : MonoBehaviour
 
         while (true)
         {
-            if (enemyCount == 1)
-                break;
-
-            // Spawn enemy somewhere off screen
-            var worldPosition = Vector3.zero; // GetRandomPositionOffScreen();
-            Instantiate(enemyPrefab, worldPosition, Quaternion.identity, transform).GetComponent<Enemy>().Initialize(playerTransform, enemyCount);
-            enemyCount++;
+            if (enemyCount < enemyCap)
+            {
+                // Spawn enemy somewhere off screen
+                var worldPosition = GetRandomPositionOffScreen(); // new Vector3(map.GetLength(0) / 2f, map.GetLength(1) / 2f); //
+                Instantiate(enemyPrefab, worldPosition, Quaternion.identity, transform).GetComponent<Enemy>().Initialize(playerTransform, enemyCount);
+                enemyCount++;
+            }
 
             yield return new WaitForSeconds(delay);
         }
@@ -45,47 +82,49 @@ public class EnemyManager : MonoBehaviour
 
     private Vector3 GetRandomPositionOffScreen()
     {
-        float halfHeight = cam.orthographicSize;
-        float halfWidth = cam.aspect * halfHeight;
-
-        Vector3 position = cam.transform.position;
+        Vector3 position = Vector3.zero;
         position.z = 0f;
 
-        // Gives small bias to corners
-        int side = Random.Range(0, 4);
-        switch (side)
+        do
         {
-            case 0: // Top
-                position.x += Random.Range(-halfWidth, halfWidth);
-                position.y += halfHeight + spawnOffset;
-                print(position);
-                break;
-            case 1: // Right
-                position.x += halfWidth + spawnOffset;
-                position.y += Random.Range(-halfHeight, halfHeight);
-                break;
-            case 2: // Down
-                position.x += Random.Range(-halfWidth, halfWidth);
-                position.y -= halfHeight + spawnOffset;
-                print(position);
-                break;
-            case 3: // Left
-                position.x -= halfWidth + spawnOffset;
-                position.y += Random.Range(-halfHeight, halfHeight);
-                break;
-        }
+            int x;
+            int y;
+            do
+            {
+                x = Random.Range(0, map.GetLength(0));
+                y = Random.Range(0, map.GetLength(1));
+            }
+            while (map[x, y] == 1);
+
+            position = new Vector3(x, y);
+
+        } while (Vector3.Distance(cam.transform.position, position) <= minSpawnRadius);
 
         return position;
+    }
+
+    public void KillEnemy()
+    {
+        enemyCount -= 1;
+        killCount += 1;
+        if (killCount == killGoal)
+        {
+            // Win Game!
+            print("YOU WIN!");
+
+            GameManager.instance.Restart();
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
 
-        float camHeight = 2 * cam.orthographicSize;
-        float camWidth = cam.aspect * camHeight;
+        float screenHeight = 2 * cam.orthographicSize;
+        float screenWidth = cam.aspect * screenHeight;
 
-        Vector3 size = new Vector3(camWidth, camHeight) + new Vector3(spawnOffset, spawnOffset);
-        Gizmos.DrawWireCube(cam.transform.position, size);
+        float radius = Mathf.Sqrt(screenHeight * screenHeight + screenWidth * screenWidth) / 2f;
+
+        Gizmos.DrawWireSphere(cam.transform.position, radius);
     }
 }

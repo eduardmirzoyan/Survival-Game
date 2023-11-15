@@ -7,6 +7,10 @@ public class Enemy : MonoBehaviour
 {
     [Header("Referenes")]
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private HitFlash hitFlash;
+
+    [Header("Settings")]
+    [SerializeField] private float health;
 
     [Header("Debug")]
     [SerializeField, ReadOnly] private Transform target;
@@ -32,5 +36,17 @@ public class Enemy : MonoBehaviour
 
         if (target != null)
             agent.SetDestination(target.position);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hitFlash.Flash();
+
+        health -= damage;
+        if (health <= 0)
+        {
+            EnemyManager.instance.KillEnemy();
+            Destroy(gameObject);
+        }
     }
 }

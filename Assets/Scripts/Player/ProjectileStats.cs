@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class CombatStats : ScriptableObject
+public class ProjectileStats : ScriptableObject
 {
     public float damage;
     public float attackSpeed;

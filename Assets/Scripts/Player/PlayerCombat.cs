@@ -9,7 +9,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
 
     [Header("Settings")]
-    [SerializeField] private CombatStats combatStats;
+    [SerializeField] private ProjectileStats stats;
 
     [Header("Debug")]
     [SerializeField] private List<Transform> targetsInRange;
@@ -18,7 +18,7 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         targetsInRange = new List<Transform>();
-        collider2d.radius = combatStats.attackRange;
+        collider2d.radius = stats.attackRange;
     }
 
     private void Update()
@@ -30,7 +30,7 @@ public class PlayerCombat : MonoBehaviour
         else
         {
             AttackClosestTarget();
-            attackCooldown = combatStats.attackSpeed;
+            attackCooldown = stats.attackSpeed;
         }
 
     }
@@ -47,6 +47,8 @@ public class PlayerCombat : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         var target = other.transform.parent;
+        print("Enemy exit range: " + target.name);
+
         bool sucess = targetsInRange.Remove(target);
         if (!sucess)
         {
@@ -71,15 +73,15 @@ public class PlayerCombat : MonoBehaviour
             }
         }
 
-        Vector3 direction = enemy.position - transform.position;
+        Vector2 direction = (Vector2)(enemy.position - transform.position);
         direction.Normalize();
 
-        Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>().Initialize(direction, combatStats.shotSpeed, combatStats.attackRange);
+        Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>().Initialize(direction, stats);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, combatStats.attackRange);
+        Gizmos.DrawWireSphere(transform.position, stats.attackRange);
     }
 }
