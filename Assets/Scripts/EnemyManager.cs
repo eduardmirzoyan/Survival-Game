@@ -9,6 +9,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private PlayerHudUI hudUI;
 
     [Header("Settings")]
     [SerializeField] private float delay;
@@ -50,6 +51,10 @@ public class EnemyManager : MonoBehaviour
     public void Initialize(int[,] map)
     {
         this.map = map;
+
+        // FIXME later
+        hudUI.UpdateEnemyCount(enemyCount, enemyCap);
+        hudUI.UpdateKillGoalLabel(killCount, killGoal);
     }
 
     public void StartSpawning()
@@ -74,6 +79,9 @@ public class EnemyManager : MonoBehaviour
                 var worldPosition = GetRandomPositionOffScreen(); // new Vector3(map.GetLength(0) / 2f, map.GetLength(1) / 2f); //
                 Instantiate(enemyPrefab, worldPosition, Quaternion.identity, transform).GetComponent<Enemy>().Initialize(playerTransform, enemyCount);
                 enemyCount++;
+
+                // FIXME later
+                hudUI.UpdateEnemyCount(enemyCount, enemyCap);
             }
 
             yield return new WaitForSeconds(delay);
@@ -114,6 +122,10 @@ public class EnemyManager : MonoBehaviour
 
             GameManager.instance.Restart();
         }
+
+        // FIXME later
+        hudUI.UpdateEnemyCount(enemyCount, enemyCap);
+        hudUI.UpdateKillGoalLabel(killCount, killGoal);
     }
 
     private void OnDrawGizmosSelected()

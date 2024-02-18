@@ -8,9 +8,11 @@ public class Enemy : MonoBehaviour
     [Header("Referenes")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private HitFlash hitFlash;
+    [SerializeField] private EnemyHudUI hudUI;
 
     [Header("Settings")]
     [SerializeField] private float health;
+    [SerializeField] private float maxHealth;
 
     [Header("Debug")]
     [SerializeField, ReadOnly] private Transform target;
@@ -27,6 +29,9 @@ public class Enemy : MonoBehaviour
     {
         this.target = target;
         agent.avoidancePriority = index;
+        maxHealth = health;
+
+        hudUI.UpdateHealth(health, maxHealth);
     }
 
     private void Update()
@@ -47,6 +52,10 @@ public class Enemy : MonoBehaviour
         {
             EnemyManager.instance.KillEnemy();
             Destroy(gameObject);
+        }
+        else
+        {
+            hudUI.UpdateHealth(health, maxHealth);
         }
     }
 }

@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private HitFlash hitFlash;
+    [SerializeField] private PlayerHudUI hudUI;
 
     [Header("Settings")]
     [SerializeField] private float maxHealth;
@@ -16,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
+        hudUI.UpdateHealth(currentHealth, maxHealth);
     }
 
     public void TakeDamage(float damage)
@@ -33,5 +35,8 @@ public class PlayerHealth : MonoBehaviour
 
             GameManager.instance.Restart();
         }
+
+        // FIXME
+        hudUI.UpdateHealth(currentHealth, maxHealth);
     }
 }

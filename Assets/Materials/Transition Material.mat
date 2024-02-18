@@ -38,10 +38,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CenterX: 0.5
-    - _CenterY: 0.5
+    - _CenterX: 0.48630497
+    - _CenterY: 0.477341
     - _EnableExternalAlpha: 0
-    - _Radius: 0.6485208
+    - _Radius: 0
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}

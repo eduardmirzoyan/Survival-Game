@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour
+public class EnemyRanged : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private CircleCollider2D collider2d;
@@ -50,7 +50,6 @@ public class PlayerCombat : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         var target = other.transform.parent;
-        print("Enemy exit range: " + target.name);
 
         bool sucess = targetsInRange.Remove(target);
         if (!sucess)
