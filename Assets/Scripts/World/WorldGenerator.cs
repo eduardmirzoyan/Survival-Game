@@ -15,15 +15,7 @@ public class WorldGenerator : ScriptableObject
     public bool useRandomSeed;
     public int seed;
 
-
     public int[,] Generate()
-    {
-        CellularAutomata cellularAutomata = new CellularAutomata();
-
-        return cellularAutomata.Generate(Random.Range(0, 10000), width, height, cullChance, numSteps);
-    }
-
-    public int[,] Gen()
     {
         System.Random rng;
 

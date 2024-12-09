@@ -5,10 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerAttackTimerUI : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image timerFillImage;
 
-    public void UpdateTimer(float cooldown, float duration)
+    public void UpdateValue(float cooldown, float duration)
     {
         timerFillImage.fillAmount = 1 - cooldown / duration;
+    }
+
+    public void SetVisibilty(bool show)
+    {
+        canvasGroup.alpha = show ? 1f : 0f;
     }
 }

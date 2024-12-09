@@ -30,16 +30,16 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator DelayedStart()
     {
-        player = FindObjectOfType<PlayerMovement>().transform;
+        player = FindObjectOfType<Movement>().transform;
 
-        var map = worldGenerator.Gen();
-        WorldRenderer.instance.GenerateWorld(map, player);
-        EnemyManager.instance.Initialize(map);
+        var map = worldGenerator.Generate();
+        //WorldRenderer.instance.GenerateWorld(map, player);
+        //WorldRenderer.instance.GenerateNavMap();
+        EnemyManager.instance.Initialize();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForEndOfFrame();
 
         EnemyManager.instance.StartSpawning();
-        TransitionManager.instance.Initialize(player);
         TransitionManager.instance.OpenScene();
     }
 

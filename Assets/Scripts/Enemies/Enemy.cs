@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
+[RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(HitFlash))]
 public class Enemy : MonoBehaviour
 {
     [Header("Referenes")]
-    [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private Movement movement;
     [SerializeField] private HitFlash hitFlash;
     [SerializeField] private EnemyHudUI hudUI;
 
@@ -16,19 +17,18 @@ public class Enemy : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField, ReadOnly] private Transform target;
-    [SerializeField] private bool disable;
+    [SerializeField] private bool isDisabled;
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        movement = GetComponent<Movement>();
+        hitFlash = GetComponent<HitFlash>();
+        hudUI = GetComponentInChildren<EnemyHudUI>();
     }
 
     public void Initialize(Transform target, int index)
     {
         this.target = target;
-        agent.avoidancePriority = index;
         maxHealth = health;
 
         hudUI.UpdateHealth(health, maxHealth);
@@ -36,11 +36,11 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (disable)
+        if (isDisabled)
             return;
 
         if (target != null)
-            agent.SetDestination(target.position);
+            ChaseTarget(target);
     }
 
     public void TakeDamage(float damage)
@@ -58,4 +58,17 @@ public class Enemy : MonoBehaviour
             hudUI.UpdateHealth(health, maxHealth);
         }
     }
+
+    #region Helpers
+
+    private void ChaseTarget(Transform target)
+    {
+        // Get direction between target and self
+        Vector2 direction = target.position - transform.position;
+        direction.Normalize();
+
+        movement.Move(direction);
+    }
+
+    #endregion
 }

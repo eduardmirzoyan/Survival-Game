@@ -35,7 +35,7 @@ public class EnemyRanged : MonoBehaviour
         }
 
         // FIXME
-        timerUI.UpdateTimer(attackCooldown, stats.attackSpeed);
+        timerUI.UpdateValue(attackCooldown, stats.attackSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

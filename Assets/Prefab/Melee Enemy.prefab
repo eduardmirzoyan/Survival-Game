@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5004292666256586283}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5038530884486667850
 BoxCollider2D:
@@ -182,8 +182,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5004292666256586283}
   - component: {fileID: 5004292666256586282}
-  - component: {fileID: 5004292666256586293}
   - component: {fileID: 5004292666256586292}
+  - component: {fileID: 4281734317557806000}
   - component: {fileID: 2487467927240483720}
   m_Layer: 0
   m_Name: Melee Enemy
@@ -205,7 +205,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5004292667605102969}
-  - {fileID: 5004292667344732966}
   - {fileID: 8989951729203139071}
   - {fileID: 709412785739869331}
   - {fileID: 8411783112245183656}
@@ -233,28 +232,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!195 &5004292666256586293
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5004292666256586280}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.6
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &5004292666256586292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,13 +244,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe0a16ce9a445024385543c3e32af437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 5004292666256586293}
+  movement: {fileID: 0}
   hitFlash: {fileID: 2487467927240483720}
   hudUI: {fileID: 7375777154755867138}
   health: 3
   maxHealth: 0
   target: {fileID: 0}
-  disable: 0
+  isDisabled: 0
+--- !u!114 &4281734317557806000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5004292666256586280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937d17e1d0a62b148af3d317a0d2859d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbody2d: {fileID: 0}
+  settings: {fileID: 11400000, guid: 3a645c423b88f4d4094970a0ae0f12a1, type: 2}
+  velocity: {x: 0, y: 0}
 --- !u!114 &2487467927240483720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,64 +281,6 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: f35b472573087854989308b42c5e6013, type: 2}
   duration: 0.1
   freezeTime: 0
---- !u!1 &5004292667344732965
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5004292667344732966}
-  - component: {fileID: 5004292667344732967}
-  m_Layer: 7
-  m_Name: Wall Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5004292667344732966
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5004292667344732965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5004292666256586283}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &5004292667344732967
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5004292667344732965}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 5f2b1043b4597ee4fba41b1464491044, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!1 &5004292667605102968
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +354,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1c4ce1a6919049a40a146c4f91575c1a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b175bfc9af4a404eb9bdb1a6bb4fe53, type: 3}
   m_Color: {r: 0.15699539, g: 0.5195849, b: 0.6792453, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -462,7 +396,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5004292666256586283}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6127941831504458668
 BoxCollider2D:
@@ -538,7 +472,7 @@ RectTransform:
   m_Children:
   - {fileID: 288917359026277355}
   m_Father: {fileID: 5004292666256586283}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

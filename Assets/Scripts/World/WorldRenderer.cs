@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.AI;
 using NavMeshPlus.Components;
 
 public class WorldRenderer : MonoBehaviour
@@ -53,7 +52,10 @@ public class WorldRenderer : MonoBehaviour
 
         player.transform.position = new Vector3(worldGenerator.width / 2f, worldGenerator.height / 2f);
         wallTilemap.CompressBounds();
+    }
 
+    public void GenerateNavMap()
+    {
         surface.BuildNavMesh();
     }
 }
